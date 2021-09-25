@@ -1,6 +1,6 @@
 
 #include "keyboard.h"
-#include "../runtime/memory.h"
+#include "memory.h"
 #include "io.h"
 
 unsigned char keyboard_buffer[512];
