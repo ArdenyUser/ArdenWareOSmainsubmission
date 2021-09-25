@@ -37,6 +37,8 @@ mboot:
 ; will insert an 'extern _main', followed by 'call _main', right
 ; before the 'jmp $'.
 stublet:
+    extern _main
+    call _main
     jmp $
 
 
