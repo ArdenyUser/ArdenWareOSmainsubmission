@@ -8,3 +8,4 @@ rem add them after start.o. If you don't add them at all, they won't be in your 
 ld -T link.ld -o kernel.bin start.o
 echo Done!
 pause
+gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -I./include -c -o main.o main.c
