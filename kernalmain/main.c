@@ -4,6 +4,7 @@
 *
 *  Notes: No warranty expressed or implied. Use at own risk. */
 #include <system.h>
+#include <keyboard.h>
 
 void *memcpy(void *dest, const void *src, size_t count)
 {
