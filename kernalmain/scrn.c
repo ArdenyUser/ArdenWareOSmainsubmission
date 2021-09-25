@@ -1,4 +1,9 @@
-#include < system.h >
+/* bkerndev - Bran's Kernel Development Tutorial
+*  By:   Brandon F. (friesenb@gmail.com)
+*  Desc: Screen output functions for Console I/O
+*
+*  Notes: No warranty expressed or implied. Use at own risk. */
+#include <system.h>
 
 /* These define our textpointer, our background and foreground
 *  colors (attributes), and x and y cursor coordinates */
@@ -147,7 +152,7 @@ void settextcolor(unsigned char forecolor, unsigned char backcolor)
 {
     /* Top 4 bytes are the background, bottom 4 bytes
     *  are the foreground color */
-    attrib = (backcolor << 4) | (forecolor & 0x0F)
+    attrib = (backcolor << 4) | (forecolor & 0x0F);
 }
 
 /* Sets our text-mode VGA pointer, then clears the screen for us */
@@ -156,4 +161,3 @@ void init_video(void)
     textmemptr = (unsigned short *)0xB8000;
     cls();
 }
-	
