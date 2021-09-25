@@ -60,7 +60,21 @@ void main()
 
     __asm__ __volatile__ ("sti");
 
-    puts("Hello World!\n");
+    puts("ArdenWare OS RSE\n");
+    puts("core build one a\n");
+    puts("beta build console opening\n");
+    char ch = 0;
+    char keycode = 0;
+    do{
+      keycode = keyboard_handler()
+      if(keycode == KEY_ENTER){
+        puts();
+      }else{
+        ch = keyboard_handler()
+        putch(ch);
+      }
+      sleep(0x02FFFFFF);
+    }while(ch > 0);
 
 //    i = 10 / 0;
 //    putch(i);
