@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include "../kernel/arch/x86/x86.h"
+#include "x86.h"
 
 struct keyboard_flags {
     unsigned char shift;
