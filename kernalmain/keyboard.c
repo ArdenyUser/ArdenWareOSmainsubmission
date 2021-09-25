@@ -84,3 +84,25 @@ void keyboard_install() {
 }
 
 unsigned char keyboard_get_char(int keycode) { return kbdus[keycode]; }
+
+char keyboard_get(struct regs* r) {
+    unsigned char scancode = io_inportb(0x60);
+
+    if (scancode & 0x80) {
+        keyboard_update_flags(scancode & 0x7F);
+    } else {
+        if (kbdus[scancode] > 0) {
+            if (kb_flags.shift) {
+                keyboard_push(kbdus_shifted[scancode]);
+                rdata = kbdus_shifted[scancode];
+                return rdata;
+            } else {
+                keyboard_push(kbdus[scancode]);
+                rdata = kbdus_shifted[scancode];
+                return rdata;
+            }
+        }
+        keyboard_update_flags(scancode);
+    }
+}
+
