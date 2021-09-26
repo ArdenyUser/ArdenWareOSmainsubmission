@@ -86,6 +86,7 @@ void keyboard_install() {
 unsigned char keyboard_get_char(int keycode) { return kbdus[keycode]; }
 
 char keyboard_get(struct regs* r) {
+    char rdata = 0;
     unsigned char scancode = io_inportb(0x60);
 
     if (scancode & 0x80) {
