@@ -21,5 +21,5 @@ gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc
 
 gcc -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -I./include -c -o keyboard.o keyboard.c
 
-ld -T link.ld -o kernel.bin start.o main.o scrn.o gdt.o idt.o isrs.o irq.o timer.o keyboard.o
-pause
+ld -T linker.ld -o kernel.bin start.o main.o scrn.o gdt.o idt.o isrs.o irq.o timer.o keyboard.o
+
