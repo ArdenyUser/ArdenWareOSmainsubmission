@@ -60,6 +60,20 @@ void outportb (unsigned short _port, unsigned char _data)
     __asm__ __volatile__ ("outb %1, %0" : : "dN" (_port), "a" (_data));
 }
 
+const char* keyboard_get_string()
+{
+    do{
+        letter = keyboard_get_char();
+        letter2 = keyboard_get_char();
+        if(letter =! "}") {
+            if(letter2 =! "}") {
+                enda = c_strcat(letter, letter2);
+            }
+        }
+    }while(letter != "}")
+    return enda;
+}   
+
 void main()
 {
     int i;
@@ -76,11 +90,7 @@ void main()
     __asm__ __volatile__ ("sti");
 
     keyboard_push("ArdenWareOS Software\n");
-    do{
-        letter = keyboard_get();
-        letter2 = keyboard_get();
-        c_strcat(letter, letter2)
-    }while(letter != "Z")
+    
 
 //    i = 10 / 0;
 //    putch(i);
