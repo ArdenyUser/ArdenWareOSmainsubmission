@@ -1,6 +1,6 @@
-#include <system.h>
-#include <keyboard.h>
-#include <stdio.h>
+#include < include/system.h >
+#include < include/keyboard.h >
+#include < include/stdio.h >
 
 char* c_strcat(char* destination, const char* source)
 {
