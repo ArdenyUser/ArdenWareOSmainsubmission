@@ -1,10 +1,23 @@
-/* bkerndev - Bran's Kernel Development Tutorial
-*  By:   Brandon F. (friesenb@gmail.com)
-*  Desc: Main.c: C code entry.
-*
-*  Notes: No warranty expressed or implied. Use at own risk. */
 #include <system.h>
 #include <keyboard.h>
+#include <stdio.h>
+
+char* c_strcat(char* destination, const char* source)
+{
+    // make `ptr` point to the end of the destination string
+    char* ptr = destination + strlen(destination);
+ 
+    // appends characters of the source to the destination string
+    while (*source != '\0') {
+        *ptr++ = *source++;
+    }
+ 
+    // null terminate destination string
+    *ptr = '\0';
+ 
+    // the destination is returned by standard `strcat()`
+    return destination;
+}
 
 void *memcpy(void *dest, const void *src, size_t count)
 {
@@ -50,7 +63,8 @@ void outportb (unsigned short _port, unsigned char _data)
 void main()
 {
     int i;
-
+    char letter = 0;
+    char letter2 = 0;
     gdt_install();
     idt_install();
     isrs_install();
@@ -61,21 +75,12 @@ void main()
 
     __asm__ __volatile__ ("sti");
 
-    puts("ArdenWare OS RSE\n");
-    puts("core build one a\n");
-    puts("beta build console opening\n");
-    char ch = 0;
-    char keycode = 0;
+    keyboard_push("ArdenWareOS Software\n");
     do{
-      keycode = keyboard_handler()
-      if(keycode == KEY_ENTER){
-        puts();
-      }else{
-        ch = keyboard_handler()
-        putch(ch);
-      }
-      sleep(0x02FFFFFF);
-    }while(ch > 0);
+        letter = keyboard_get();
+        letter2 = keyboard_get();
+        c_strcat(
+    }while(letter != "Z")
 
 //    i = 10 / 0;
 //    putch(i);
