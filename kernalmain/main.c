@@ -79,7 +79,7 @@ void main()
     do{
         letter = keyboard_get();
         letter2 = keyboard_get();
-        c_strcat(
+        c_strcat(letter, letter2)
     }while(letter != "Z")
 
 //    i = 10 / 0;
