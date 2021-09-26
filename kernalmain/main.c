@@ -62,8 +62,56 @@ void outportb (unsigned short _port, unsigned char _data)
 
 char *bank_var[143] = {"a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"}
 
+void terminal_xxx()
+{
+	char letter = 0;
+	char letter2 = 0;
+	int exitd = 0;
+	const char* enda = 0;
+    do{
+        letter = keyboard_get_char();
+        letter2 = keyboard_get_char();
+        if(letter =! ".") {
+            if(letter2 =! ".") {
+                cmd = c_strcat(letter, letter2);
+				
+            }
+			else {
+			    exitd = 1;
+			}
+        }
+		else {
+			exitd = 1;
+	    }
+    }while(exitd != 1)
+	letter = 0;
+	letter2 = 0;
+	exitd = 0;
+	enda = 0;
+    do{
+        letter = keyboard_get_char();
+        letter2 = keyboard_get_char();
+        if(letter =! ";") {
+            if(letter2 =! ";") {
+                value = c_strcat(letter, letter2);
+				
+            }
+			else {
+			    exitd = 1;
+			}
+			
+        }
+		else {
+			exitd = 1;
+		}
+    }while(exitd != 1)
+}
+
 const char* keyboard_get_string()
 {
+	char letter = keyboard_get_char();
+    char letter2 = keyboard_get_char();
+	const char* enda = 0;
     do{
         letter = keyboard_get_char();
         letter2 = keyboard_get_char();
@@ -71,8 +119,14 @@ const char* keyboard_get_string()
             if(letter2 =! "}") {
                 enda = c_strcat(letter, letter2);
             }
+			else {
+			    exitd = 1;
+			}
         }
-    }while(letter != "}")
+		else {
+			exitd = 1;
+		}
+    }while(exitd != 1)
     return enda;
 }
 
@@ -105,3 +159,4 @@ void main()
 
     for (;;);
 }
+
