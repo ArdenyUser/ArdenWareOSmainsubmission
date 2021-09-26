@@ -1,7 +1,9 @@
+sudo apt-get update -y
 apt install binutils
 apt install gcc
 apt install unzip
 apt install nasm
+sudo apt-get install -y nasm
 nasm -f aout -o start.o start.asm
 
 
