@@ -1,3 +1,6 @@
+apt install binutils
+apt install gcc
+apt install unzip
 echo Now assembling, compiling, and linking your kernel:
 nasm -f aout -o start.o start.asm
 rem Remember this spot here: We will add 'gcc' commands here to compile C sources
