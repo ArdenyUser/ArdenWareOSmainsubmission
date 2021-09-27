@@ -82,7 +82,7 @@ void terminal_xxx()
         }
 		else {
 			exitd = 1;
-	    }
+    }
     }while(exitd != 1)
 	letter = 0;
 	letter2 = 0;
@@ -103,13 +103,59 @@ void terminal_xxx()
         }
 		else {
 			exitd = 1;
-		}
+                }
+    
+    
     }while(exitd != 1)
+    if(cmd == "mkdir") {
+        my_mkdir(value);
+    }
+    if(cmd == "rmdir") {
+        my_rmdir(value);
+    }
+    if(cmd == "rename") {
+	
+	do{
+        letter = keyboard_get_char();
+        letter2 = keyboard_get_char();
+        if(letter =! ";") {
+            if(letter2 =! ";") {
+                value2 = c_strcat(letter, letter2);
+				
+            }
+			else {
+			    exitd = 1;
+			}
+			
+        }
+		else {
+			exitd = 1;
+                }
+        my_rename(value, value2);  
+    }
+    if(cmd == "mkroot") {
+        mkroot();
+    }
+    if(cmd == "dir") {
+        show_file_list();
+    }
+    if(cmd == "resetdisk") {
+        reset_disk();
+    }
+    if(cmd == "fsbuild") {
+        init();
+    }
+    if(cmd == "rm") {
+        my_remove(value);
+    }
+    if(cmd == "fclose") {
+        my_close(value);
+    }
 }
 
 const char* keyboard_get_string()
 {
-	char letter = keyboard_get_char();
+char letter = keyboard_get_char();
     char letter2 = keyboard_get_char();
 	const char* enda = 0;
     do{
@@ -148,6 +194,8 @@ void main()
     init_video();
     timer_install();
     keyboard_install();
+    init();
+    mkroot();
 
     __asm__ __volatile__ ("sti");
 
