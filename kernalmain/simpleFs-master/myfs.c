@@ -102,14 +102,14 @@ void mkroot(){
     /* init(); */
     /*first, let the bit 0 don't be allocated as most fs do*/
     struct buf * bp = get_block(START_BLOCK);
-    /* printf("here\n");exit(0); */
+    /* keyboard_push("here\n");exit(0); */
     int *wptr = &bp->b_bitmap[0];
     *wptr = (int)1;
     bp->b_dirt = DIRTY;
     put_block(bp);
 
     bp = get_block(START_BLOCK + S_IMAP_BLOCKS);
-    /* printf("here\n");exit(0); */
+    /* keyboard_push("here\n");exit(0); */
     wptr = &bp->b_bitmap[0];
     *wptr = (int)1;
     bp->b_dirt = DIRTY;
@@ -117,34 +117,34 @@ void mkroot(){
 
     /*allocate bit 1 for root inode  */
     /* bit_t root_bit = alloc_bit(IMAP, 1); */
-    /* printf("root bit is %d\n", (int) root_bit); */
+    /* keyboard_push("root bit is %d\n", (int) root_bit); */
     int mode = 0x00000003;
     struct inode * root_inode = alloc_inode(mode);
     if (root_inode == NIL_INODE){
-        printf("can't allocate root_inode\n");
+        keyboard_push("can't allocate root_inode\n");
         exit(1);
     }
     if (root_inode->i_num != 1){
-        printf("root bit allocate error: can't set root to bit 1, the inode number is %d\n", (int)root_inode->i_num);
+        keyboard_push("root bit allocate error: can't set root to bit 1, the inode number is %d\n", (int)root_inode->i_num);
         exit(1);
     }
     if (!(root_inode->i_mode & I_DIRECTORY)){
-        printf("root is not a directory!!\n");
+        keyboard_push("root is not a directory!!\n");
         exit(1);
     }
     root_inode->i_dirt = DIRTY;
     /* put_inode(root_inode); */
     root_inode = get_inode(1);
     if (!(root_inode->i_mode & I_DIRECTORY)){
-        printf("after put and get: root is not a directory!!\n");
-        printf("this time the i number is %d and imode is %d\n", (int)root_inode->i_num, root_inode->i_mode);
+        keyboard_push("after put and get: root is not a directory!!\n");
+        keyboard_push("this time the i number is %d and imode is %d\n", (int)root_inode->i_num, root_inode->i_mode);
         exit(1);
     }
 
     /* allocate disk for root inode */
     zone_t root_zone = alloc_zone(S_FIRSTDATAZONE);
     if (root_zone != (S_FIRSTDATAZONE + 1)){
-        printf("root zone is not the first data zone!!\n");
+        keyboard_push("root zone is not the first data zone!!\n");
         exit(1);
     }
     struct buf *rp = get_block(root_zone);
@@ -183,13 +183,13 @@ int my_open(char * path){
 
     rip = last_dir(path, string);
     if (rip == NIL_INODE){
-        printf("the path name is not correct: incorrect dir!\n");
+        keyboard_push("the path name is not correct: incorrect dir!\n");
         return errno;
     }
     ip = advance(rip, string);
     put_inode(rip);
     if (ip == NIL_INODE){
-        printf("the path name is not correct: incorrect filename!\n");
+        keyboard_push("the path name is not correct: incorrect filename!\n");
         return errno;
     }
     if (r = get_fd(&fd, &fp) != OK)
@@ -214,25 +214,25 @@ int my_create(char * path){
 
     rip = last_dir(path, string);
     if (rip == NIL_INODE){
-        printf("the path name is not correct!\n");
+        keyboard_push("the path name is not correct!\n");
         return errno;
     }
     *inode_num = 0;
     if(r = search_dir(rip, string, inode_num, LOOK_UP) != OK){
-        printf("error occured when trying to search diretory");
+        keyboard_push("error occured when trying to search diretory");
         put_inode(rip);
         return;
     }
     if(*inode_num != 0){
-        printf("item with the same name exits, please delete that item first\n ");
+        keyboard_push("item with the same name exits, please delete that item first\n ");
         put_inode(rip);
         return;
     }
     ip = alloc_inode(1);
-    printf("allocate a new inode for %s, inode_num is %d\n", string, ip->i_num);
+    keyboard_push("allocate a new inode for %s, inode_num is %d\n", string, ip->i_num);
     *inode_num = ip->i_num;
     if (r = search_dir(rip, string, inode_num, ENTER) != OK){
-        printf("enter a item error: %s\n", strerror(r));
+        keyboard_push("enter a item error: %s\n", strerror(r));
         put_inode(rip);
         return r;
     }
@@ -258,10 +258,10 @@ int my_read(int fd, char * buf, int count){
 
     rip = filp[fd].filp_ino;
     if(rip == NIL_INODE){
-        printf("incorrect fd!!\n");
+        keyboard_push("incorrect fd!!\n");
         return -1;
     }
-    printf("size of this file is %d\n", rip->i_size);
+    keyboard_push("size of this file is %d\n", rip->i_size);
 
     if(filp[fd].filp_type == READ){
         position = filp[fd].filp_pos;
@@ -271,7 +271,7 @@ int my_read(int fd, char * buf, int count){
 
 
     if ((position + count) > rip->i_size) {
-        printf("count is bigger than file size\n");
+        keyboard_push("count is bigger than file size\n");
         return -1;
     }
 
@@ -294,10 +294,10 @@ int my_read(int fd, char * buf, int count){
     for(; position < tmp; position += S_BLOCK_SIZE){
         b = read_map(rip, position);
         if(b <= 0){
-            printf("read map error\n");
+            keyboard_push("read map error\n");
             return -1;
         }
-        /* printf("read the inode block, block number is %d\n", b); */
+        /* keyboard_push("read the inode block, block number is %d\n", b); */
         bp = get_block(b);
         left =  tmp - position;
         if (left >= S_BLOCK_SIZE){
@@ -325,14 +325,14 @@ int my_write(int fd, char *buf, int count){
 
     rip = filp[fd].filp_ino;
     if(rip == NIL_INODE){
-        printf("incorrect fd!!\n");
+        keyboard_push("incorrect fd!!\n");
         return -1;
     }
 
-    /* printf("size of this file is %d\n", rip->i_size); */
+    /* keyboard_push("size of this file is %d\n", rip->i_size); */
     if(filp[fd].filp_type == WRITE){
         position = filp[fd].filp_pos;
-        printf("current position is %d\n", position);
+        keyboard_push("current position is %d\n", position);
     }else{
         position = 0;
         if(rip->i_size > 0){
@@ -358,7 +358,7 @@ int my_write(int fd, char *buf, int count){
         bp->b_dirt = DIRTY;
         put_block(bp);
         position += left;
-    printf("current position is %d and tmp is %d and buf_pos is %d\n", position, tmp, buf_pos);
+    keyboard_push("current position is %d and tmp is %d and buf_pos is %d\n", position, tmp, buf_pos);
     /* exit(0); */
     }
 
@@ -366,27 +366,27 @@ int my_write(int fd, char *buf, int count){
     for(; position < tmp; position += S_BLOCK_SIZE){
         bp = new_block(rip, position);
         if(bp == NIL_BUF){
-            printf("create a new block error\n");
+            keyboard_push("create a new block error\n");
             return -1;
         }
-        /* printf("write a new inode block, block number is %d\n", bp->b_blocknr); */
+        /* keyboard_push("write a new inode block, block number is %d\n", bp->b_blocknr); */
         left = tmp - position;
         if (left >= S_BLOCK_SIZE){
             for(i = 0; i < S_BLOCK_SIZE; ++i){
                 if(buf_pos >= count){
-                    printf("buf_pos bigger than count, this time left is %d, and position is%d\n", left, position);
+                    keyboard_push("buf_pos bigger than count, this time left is %d, and position is%d\n", left, position);
                     exit(1);
                 }
                 bp->b_data[i] = buf[buf_pos++];
             }
         }else{
             /* if(left != 128){ */
-                /* printf("here, current left is %d buf_pos is %d\n",left,  buf_pos); */
+                /* keyboard_push("here, current left is %d buf_pos is %d\n",left,  buf_pos); */
                 /* exit(0); */
             /* } */
             for(i = 0; i < left; ++i){
                 if(buf_pos > count){
-                    printf("buf_pos bigger than count\n");
+                    keyboard_push("buf_pos bigger than count\n");
                     exit(1);
                 }
                 bp->b_data[i] = buf[buf_pos++];
@@ -410,7 +410,7 @@ int my_close(int fd){
     filp[fd].filp_type = FILP_CLOSED;
     filp[fd].filp_pos = 0;
     if(rip == NIL_INODE){
-        printf("incorrect fd!!\n");
+        keyboard_push("incorrect fd!!\n");
         return -1;
     }
     put_inode(rip);
@@ -430,12 +430,12 @@ int my_remove(char * name){
     rip = last_dir(name, string);
 
     if(rip == NIL_INODE){
-        printf("search directory error: please enter the correct path\n");
+        keyboard_push("search directory error: please enter the correct path\n");
         return -1;
     }
 
     if(r = search_dir(rip, string, inode_num, DELETE) != OK){
-        printf("delete file error: %s", strerror(r));
+        keyboard_push("delete file error: %s", strerror(r));
     }
 
     put_inode(rip);
@@ -456,21 +456,21 @@ int my_rename(char * oldname, char * newname){
     rip = last_dir(oldname, string);
 
     if(rip == NIL_INODE){
-        printf("search directory error: please enter the correct oldname path\n");
+        keyboard_push("search directory error: please enter the correct oldname path\n");
         return -1;
     }
 
     ip = last_dir(newname, newstring);
 
     if((ip == NIL_INODE) || (ip->i_num != rip->i_num)){
-        printf("search directory error: please enter the correct newname path\n");
+        keyboard_push("search directory error: please enter the correct newname path\n");
         return -1;
     }
     put_inode(ip);
 
     /* my_strcpy(newstring, newname); */
     if (r = dir_rename(rip, string, newstring) != OK){
-        printf("rename file error: please enter the correct name\n");
+        keyboard_push("rename file error: please enter the correct name\n");
     }
     /* rip->i_dirt = DIRTY; */
     put_inode(rip);
@@ -488,37 +488,37 @@ int my_mkdir(char * name){
 
     rip = last_dir(name, string);
     if (rip == NIL_INODE){
-        printf("the path name is not correct!\n");
+        keyboard_push("the path name is not correct!\n");
         return errno;
     }
     *inode_num = 0;
     if(r = search_dir(rip, string, inode_num, LOOK_UP) != OK){
-        printf("error occured when trying to search diretory");
+        keyboard_push("error occured when trying to search diretory");
         put_inode(rip);
         return;
     }
     if(*inode_num != 0){
-        printf("item with the same name exits, please delete that item first\n ");
+        keyboard_push("item with the same name exits, please delete that item first\n ");
         put_inode(rip);
         return;
     }
     ip = alloc_inode(3);
-    printf("allocate a new inode for %s, inode_num is %d\n", string, ip->i_num);
+    keyboard_push("allocate a new inode for %s, inode_num is %d\n", string, ip->i_num);
     *inode_num = ip->i_num;
     if (r = search_dir(rip, string, inode_num, ENTER) != OK){
-        printf("enter a item %s error: %s\n", string, strerror(r));
+        keyboard_push("enter a item %s error: %s\n", string, strerror(r));
     }
 
     my_strcpy(string, "..");
     *inode_num = rip->i_num;
     if (r = search_dir(ip, string, inode_num, ENTER) != OK){
-        printf("enter a item %s error: %s\n", string, strerror(r));
+        keyboard_push("enter a item %s error: %s\n", string, strerror(r));
     }
 
     my_strcpy(string, ".");
     *inode_num = ip->i_num;
     if (r = search_dir(ip, string, inode_num, ENTER) != OK){
-        printf("enter a item %s error: %s\n", string, strerror(r));
+        keyboard_push("enter a item %s error: %s\n", string, strerror(r));
     }
     ip->i_dirt = DIRTY;
     put_inode(ip);
@@ -544,12 +544,12 @@ int my_rmdir(char * name){
     rip = last_dir(name, string);
 
     if(rip == NIL_INODE){
-        printf("search directory error: please enter the correct path\n");
+        keyboard_push("search directory error: please enter the correct path\n");
         return -1;
     }
 
     if(r = search_dir(rip, string, inode_num, DELETE) != OK){
-        printf("delete file error: %s", strerror(r));
+        keyboard_push("delete file error: %s", strerror(r));
         put_inode(rip);
         return -1;
     }
@@ -557,7 +557,7 @@ int my_rmdir(char * name){
 
     ip = get_inode(*inode_num);
     if(ip == NIL_INODE || !(ip->i_mode & I_DIRECTORY)){
-        printf("search directory error: please enter the correct path\n");
+        keyboard_push("search directory error: please enter the correct path\n");
         put_inode(ip);
         return -1;
     }
@@ -571,7 +571,7 @@ int my_rmdir(char * name){
 }
 
 void show_file_list(){
-    printf("files in the disk:\n");
+    keyboard_push("files in the disk:\n");
     struct inode * root_inode = get_inode(1);
     list_dir(root_inode, 0);
     put_inode(root_inode);
@@ -608,7 +608,7 @@ void reset_disk(){
 
     root = alloc_inode(3);
     if(root->i_num != 1){
-        printf("root is not allocate as 1!! it is %d\n", root->i_num);
+        keyboard_push("root is not allocate as 1!! it is %d\n", root->i_num);
         number = root->i_num;
         put_inode(root);
         free_inode(number);
