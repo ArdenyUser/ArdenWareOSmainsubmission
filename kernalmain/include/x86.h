@@ -50,7 +50,7 @@ void idt_set_gate(unsigned char id, unsigned long base, unsigned short sel,
 
 void isr_load();
 
-void irq_install_handler(int irq, void (*handler)(struct regs *r));
+void irq_install_handler_a(int irq, void (*handler)(struct regs *r));
 
 void irq_uninstall_handler(int irq);
 
