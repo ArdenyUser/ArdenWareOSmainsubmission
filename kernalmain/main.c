@@ -1,6 +1,10 @@
 #include < include/system.h >
 #include < include/keyboard.h >
-#include < include/stdio.h >
+#include < simpleFs-master/dir.h >
+#include < simpleFs-master/file.h >
+#include < simpleFs-master/inode.h >
+#include < simpleFs-master/myfs.h >
+#include < simpleFs-master/super.h >
 
 char* c_strcat(char* destination, const char* source)
 {
